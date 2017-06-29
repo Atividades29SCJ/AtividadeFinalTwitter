@@ -41,7 +41,11 @@ public class Principal {
 
 			if(opcao != 0){
 				input =	mostrarPainel();
-				opcao = Integer.parseInt(input);
+				if(input != null) {
+					opcao = Integer.parseInt(input);
+				}else{
+					opcao = 0;
+				}
 			}
 		}
 		
@@ -81,10 +85,15 @@ public class Principal {
 	private static void informacoesPesquisa(){
 		hashtag = JOptionPane.showInputDialog("Digite sua HashTag da pesquisa.");
 		try{
-			datapesquisa = LocalDate.parse(JOptionPane.showInputDialog("Digite a data de inicio da pesquisa. Formato: YYYY-MM-dd"
-																		+ "\n Ex.: " + LocalDate.now().minusDays(Constants.NUMBER_DAYS)));
+			datapesquisa = LocalDate.parse(JOptionPane.showInputDialog("Digite a data de inicio da pesquisa com no máximo 7 dias de diferença da data atual. Formato: YYYY-MM-dd"
+																		+ "\n Data de inicio máxima: " + LocalDate.now().minusDays(Constants.NUMBER_DAYS)));
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro ao digitar a data", 1);
+		}
+		
+		if(datapesquisa.isBefore(LocalDate.now().minusDays(Constants.NUMBER_DAYS))) {
+			System.out.println("Não foi possivel inicializar o relatório, a data da pesquisa deve ter no máximo 7 dias de diferença da data atual");
+			return;
 		}
 		
 		inicializarRelatorio();
